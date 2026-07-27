@@ -19,7 +19,7 @@ void matris_carpim(float matris[3][3], float olasılıklar[3])
         }
         yeni_olasılıklar[i] = toplam;
     }
-    printf("Yeni Olasiliklar: %.2f, %.2f, %.2f\n", yeni_olasılıklar[0], yeni_olasılıklar[1], yeni_olasılıklar[2]);
+    printf("new possibilities: %.2f, %.2f, %.2f\n", yeni_olasılıklar[0], yeni_olasılıklar[1], yeni_olasılıklar[2]);
 }
 
 int main()
