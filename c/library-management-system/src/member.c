@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <member.h>
+#include "member.h"
 
 static int total_members_count = 0;
 
-Member *create_member(int id, char *member_name, bool is_the_member_registered, char *borowed_books_list, bool is_banned, char *ban_reason)
+Member *create_member(const char *id, const char *member_name)
 {
     Member *new_member = (Member *)malloc(sizeof(Member));
     if (new_member == NULL)
@@ -13,20 +13,21 @@ Member *create_member(int id, char *member_name, bool is_the_member_registered, 
         printf("Memory allocation failed!\n");
         return NULL;
     }
-    new_member->id = id;
+
+    strncpy(new_member->id, id, sizeof(new_member->id));
+    new_member->id[sizeof(id) - 1] = '\0';
 
     strncpy(new_member->member_name, member_name, sizeof(member_name));
     new_member->member_name[sizeof(member_name) - 1] = '\0';
 
-    new_member->is_the_member_registered = is_the_member_registered;
+    new_member->is_the_member_registered = true;
 
-    strncpy(new_member->borrowed_books_list, borowed_books_list, sizeof(borowed_books_list));
-    new_member->borrowed_books_list[sizeof(borowed_books_list) - 1] = '\0';
+    new_member->is_banned = false;
 
-    new_member->is_banned = is_banned;
+    strcpy(new_member->ban_reason, "");
 
-    strncpy(new_member->ban_reason, ban_reason, sizeof(ban_reason));
-    new_member->ban_reason[sizeof(ban_reason) - 1] = '\0';
+    total_members_count++;
+    return new_member;
 }
 
 int get_total_member_counts(void)
@@ -40,4 +41,5 @@ void free_members(Member *member)
     {
         free(member);
     }
+    total_members_count--;
 }

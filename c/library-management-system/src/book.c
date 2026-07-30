@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <book.h>
+#include "book.h"
 
 static int total_books_count = 0;
 
@@ -15,7 +15,7 @@ InventoryEntry *create_book(int id, const char *title, const char *author, bool 
     }
 
     new_book->id = id;
-    
+
     strncpy(new_book->book_title, title, sizeof(new_book->book_title) - 1);
     new_book->book_title[sizeof(new_book->book_title) - 1] = '\0';
 
@@ -41,4 +41,5 @@ void free_books(InventoryEntry *book)
     {
         free(book);
     }
+    total_books_count--;
 }
