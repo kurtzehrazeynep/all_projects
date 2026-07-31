@@ -26,6 +26,13 @@ Member *create_member(const char *id, const char *member_name)
 
     strcpy(new_member->ban_reason, "");
 
+    new_member->borrowed_books_count = 0;
+
+    for (int i = 0; i < 10; i++)
+    {
+        strcpy(new_member->borrowed_books_list[i], "");
+    }
+
     total_members_count++;
     return new_member;
 }

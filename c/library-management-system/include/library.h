@@ -32,6 +32,6 @@ void return_book(LibraryManagement *lib, const char *book_id, const char *member
 void load_books_from_file(LibraryManagement *lib);
 void save_books_to_file(const LibraryManagement *lib);
 void load_members_from_file(LibraryManagement *lib);
-void save_members_to_json(const LibraryManagement *lib);
+void save_members_to_file(const LibraryManagement *lib);
 
 #endif

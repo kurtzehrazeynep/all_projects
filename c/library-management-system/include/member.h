@@ -3,14 +3,15 @@
 #include <stdbool.h>
 typedef struct
 {
-    int id;
+    char id[50];
     char member_name[100];
     bool is_the_member_registered;
-    char borrowed_books_list[10][50];
+    char borrowed_books_list[10][100];
+    int borrowed_books_count;
     bool is_banned;
     char ban_reason[200];
 } Member;
-Member *create_member(int id, const char *member_name, bool is_the_member_registered, const char *borowed_books_list, bool is_banned, const *ban_reason);
+Member *create_member(const char *id, const char *member_name);
 int get_total_member_counts(void);
 void free_members(Member *member);
 #endif

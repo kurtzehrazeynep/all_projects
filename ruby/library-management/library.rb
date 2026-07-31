@@ -93,22 +93,22 @@ class LibraryManagement
     member = @members.find { |m| m.id.to_s == member_id.to_s }
 
     if book.nil?
-      puts "⚠️ Book not found."
+      puts "⚠️ Book not found." #okay
       return
     end
 
     if member.nil?
-      puts "⚠️ Member not found."
+      puts "⚠️ Member not found." #okay
       return
     end
 
     if !member.is_the_member_registered
-      puts "⚠️ Lending failed! Member registration is cancelled."
+      puts "⚠️ Lending failed! Member registration is cancelled." #okay
       return
     end
 
     if member.is_banned
-      puts "🚫 Lending failed! Member is banned."
+      puts "🚫 Lending failed! Member is banned." #okay
       return
     end
 
@@ -120,16 +120,16 @@ class LibraryManagement
       save_members_to_json
       puts "Book '#{book.book_title}' successfully lent to #{member.member_name}."
     else
-      puts "⚠️ Book is already borrowed by someone else."
+      puts "⚠️ Book is already borrowed by someone else." #okay
     end
   end
 
   def return_book(id, member_id)
-    book = @bookshelf.find { |b| b.id.to_s == id.to_s }
-    member = @members.find { |m| m.id.to_s == member_id.to_s }
+    book = @bookshelf.find { |b| b.id.to_s == id.to_s } #okay
+    member = @members.find { |m| m.id.to_s == member_id.to_s  #okay}
 
     if book.nil? || member.nil?
-      puts "⚠️ Invalid book or member ID."
+      puts "⚠️ Invalid book or member ID." #okay
       return
     end
 
@@ -141,7 +141,7 @@ class LibraryManagement
       save_members_to_json
       puts "Book successfully returned."
     else
-      puts "⚠️ This book was not borrowed by this member."
+      puts "⚠️ This book was not borrowed by this member." #okay
     end
   end
 
