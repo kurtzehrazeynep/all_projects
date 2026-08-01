@@ -348,27 +348,36 @@ void save_members_to_file(const LibraryManagement *lib)
     for (int i = 0; i < lib->membercount i++)
     {
         fprintf(file, "%s|%s|%d|%d|%s|%d\n",
-                lib->members[lib->membercount].id,
-                lib->members[lib->membercount].member_name,
-                (int *)&lib->members[lib->membercount].is_the_member_registered,
-                (int *)&lib->members[lib->membercount].is_banned,
-                lib->members[lib->membercount].ban_reason,
-                (int *)&lib->members[lib->membercount].borrowed_books_count);
+                lib->members[i].id,
+                lib->members[i].member_name,
+                lib->members[i].is_the_member_registered,
+                lib->members[i].is_banned,
+                lib->members[i].ban_reason,
+                lib->members[i].borrowed_books_count);
     }
     fclose(file);
 }
 void load_members_from_file(LibraryManagement *lib)
 {
-  FILE*file = fopen("members.txt","r");
-  if (file == NULL)
-  {
-    return;
-  }
-  lib->membercount = 0;
-  while (fscanf(file,"%49[^|]|%99[^|]|%d[^|]|%d[^|]|%9[]"))
-  {
-
-  }
-  
-  
+    FILE *file = fopen("members.txt", "r");
+    if (file == NULL)
+    {
+        return;
+    }
+    lib->membercount = 0;
+    while (fscanf(file, "%49[^|]|%99[^|]|%d[^|]|%d[^|]|%199[^|]|%d\n",
+                  lib->members[lib->membercount].id,
+                  lib->members[lib->membercount].member_name,
+                  (int *)&lib->members[lib->membercount].is_the_member_registered,
+                  (int *)&lib->members[lib->membercount].is_banned,
+                  lib->members[lib->membercount].ban_reason,
+                  (int *)&lib->members[lib->membercount].borrowed_books_count) == 6)
+    {
+        lib->membercount++;
+        if (lib->membercount >= 100)
+        {
+            break;
+        }
+    }
+    fclose(file);
 }
