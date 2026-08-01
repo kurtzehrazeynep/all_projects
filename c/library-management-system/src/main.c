@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <string.h>
+#include "library.h"
 int main()
 {
+    LibraryManagement system;
+    init_library(&system);
     int choice;
     int book_id[50];
     int member_id[50];
+    int member_name[100];
     char title[100];
     char author_name[100];
     char ban_reason[200];
@@ -49,36 +53,37 @@ int main()
             fgets(author_name, sizeof(author_name), stdin);
             author_name[strspn(author_name, "\n")] = '\0';
 
-            // system_add_book (id,title,author_name) gelicek
+            add_book(&system, book_id, title, author_name);
 
             break;
         case 2:
             printf("Liating All Books...");
-            // system_list_all_books buraya gelicek
+            list_all_books(&system);
         case 3:
             printf("Viewing Statistics...");
-            // system_view_total_count_statistics
+            view_total_count_statistics(&system);
         case 4:
             printf("Please Enter Member ID: ");
             fgets(member_id, sizeof(member_id), stdin);
             member_id[strspn(member_id, "\n")] = '\0';
 
             printf("Enter Member Name: ");
-            fgets(member_id, sizeof(member_id), stdin);
-            member_id[strspn(member_id, "\n")] = '\0';
-            // system_add_member(member_id,member_name)
+            fgets(member_name, sizeof(member_name), stdin);
+
+            member_name[strspn(member_name, "\n")] = '\0';
+            add_member(&system, member_id, member_name);
         case 5:
-            // system_list_all_members
+            list_all_members(&system);
         case 6:
             printf("Please Enter Book ID: ");
             fgets(book_id, sizeof(book_id), stdin);
             book_id[strspn(book_id, "\n")] = '\0';
-            // system_remove_book(id)
+            remove_book(&system, book_id);
         case 7:
             printf("Please enter the ID  of the member you wish to cancel");
             fgets(member_id, sizeof(member_id), stdin);
             member_id[strspn(member_id, "\n")] = '\0';
-            // system_delete_member_registration(id)
+            delete_member_registration(&system, member_id);
         case 8:
             printf("Please enter the ID of the book you wish to borrow.");
             fgets(book_id, sizeof(book_id), stdin);
@@ -87,6 +92,7 @@ int main()
             printf("Please enter the member ID of the person to whom the book will be lent. ");
             fgets(member_id, sizeof(member_id), stdin);
             member_id[strspn(member_id, "\n")] = '\0';
+            lend_book(&system, book_id, member_id);
 
         case 9:
             printf("Enter the ID of the member who will make the return.");
@@ -97,7 +103,7 @@ int main()
             fgets(book_id, sizeof(book_id), stdin);
             book_id[strspn(book_id, "\n")] = '\0';
 
-            // system_return_book(book_id,member_id)
+            return_book(&system, book_id, member_id);
 
         case 10:
             printf("Enter the ID of the member to be banned. ");
@@ -107,13 +113,14 @@ int main()
             printf("Please Enter The Reason for the ban. ");
             fgets(ban_reason, sizeof(ban_reason), stdin);
             ban_reason[strspn(ban_reason, "\n")] = '\0';
-        // system_ban_member(member_id,ban_reason)
+
+            ban_member(&system, member_id, ban_reason);
         case 11:
             printf("Enter the ID of the User whose ban is to be lifted.");
             fgets(member_id, sizeof(member_id), stdin);
             member_id[strspn(member_id, "\n")] = '\0';
 
-            // system_lisft_the_ban(member_id)
+            lift_the_ban(&system,member_id);
         case 12:
             printf("Exiting test system. Goodbye!");
             return 0;

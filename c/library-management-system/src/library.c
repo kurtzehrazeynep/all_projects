@@ -44,8 +44,8 @@ void list_all_books(const LibraryManagement *lib)
 
             printf("-[%s] %s by %s [%s]\n",
                    lib->bookshelf[i].id,
-                   lib->bookshelf->book_title,
-                   lib->bookshelf->author_name,
+                   lib->bookshelf[i].book_title,
+                   lib->bookshelf[i].author_name,
                    status);
         }
     }
@@ -59,7 +59,7 @@ void total_count_statistica(const LibraryManagement *lib)
 
 void add_member(LibraryManagement *lib, const char *id, const char *member_name)
 {
-    if (lib->members < 100)
+    if (lib->membercount < 100)
     {
         strcpy(lib->members[lib->membercount].id, id);
         strcpy(lib->members[lib->membercount].member_name, member_name);
@@ -89,7 +89,7 @@ void list_all_members(const LibraryManagement *lib)
         for (int i = 0; i < lib->membercount; i++)
         {
             char status[200];
-            if (lib->members[i].is_the_member_registered)
+            if (!lib->members[i].is_the_member_registered)
             {
                 strcpy(status, "DEACTIVATED");
             }
@@ -124,13 +124,13 @@ void remove_book(LibraryManagement *lib, const char *id)
     {
         if (lib->bookshelf[index].in_library)
         {
-            for (int i = 0; i < lib->bookcount - 1; i++)
+            for (int i = index; i < lib->bookcount - 1; i++)
             {
                 lib->bookshelf[i] = lib->bookshelf[i + 1];
             }
             lib->bookcount--;
             save_books_to_file(lib);
-            rintf("Book ID %s has been removed from the library.\n", id);
+            printf("Book ID %s has been removed from the library.\n", id);
         }
         else
         {
@@ -270,7 +270,7 @@ void ban_member(LibraryManagement *lib, const char *id, const char *ban_reason)
         else if (strcmpy(lib->members[i].id, id) == 0)
         {
             lib->members[i].is_banned = true;
-            strcpy(lib->members[i]->ban_reason, ban_reason);
+            strcpy(lib->members[i].ban_reason, ban_reason);
             save_members_to_file(lib);
             printf("🚫 Member %s has been banned. Reason %s", lib->members[i].member_name, lib->members[i].ban_reason);
         }
@@ -291,7 +291,7 @@ void lift_the_ban(LibraryManagement *lib, const char *id)
             lib->members[i].is_banned = false;
             strcpy(lib->members[i].ban_reason, "");
             save_members_to_file;
-            printf("Ban Lifted for member %s", lib->members[i].member_name),
+            printf("Ban Lifted for member %s", lib->members[i].member_name);
         }
     }
     return;
@@ -345,7 +345,7 @@ void save_members_to_file(const LibraryManagement *lib)
     {
         return;
     }
-    for (int i = 0; i < lib->membercount i++)
+    for (int i = 0; i < lib->membercount; i++)
     {
         fprintf(file, "%s|%s|%d|%d|%s|%d\n",
                 lib->members[i].id,
