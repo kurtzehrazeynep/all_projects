@@ -153,7 +153,7 @@ class LibraryManagement
       save_members_to_json
       puts "🚫 Member #{member.member_name} has been banned. Reason: #{ban_reason}"
     else
-      puts "⚠️ Member not found."
+      puts "⚠️ Member not found."  #okay
     end
   end
 

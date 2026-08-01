@@ -254,9 +254,121 @@ void return_book(LibraryManagement *lib, const char *book_id, const char *member
             lib->members[index_m].borrowed_books_count--;
         }
     }
+    save_books_to_file(lib);
+    save_members_to_file(lib);
     return;
 }
-void ban_member(LibraryManagement *lib, const char *id, const char *ban_reason){
-    
+void ban_member(LibraryManagement *lib, const char *id, const char *ban_reason)
+{
+    for (int i = 0; i < lib->membercount; i++)
+    {
+        if (strcmpy(lib->members[i].id, id) != 0)
+        {
+            printf("⚠️ Member not found!.");
+            return NULL;
+        }
+        else if (strcmpy(lib->members[i].id, id) == 0)
+        {
+            lib->members[i].is_banned = true;
+            strcpy(lib->members[i]->ban_reason, ban_reason);
+            save_members_to_file(lib);
+            printf("🚫 Member %s has been banned. Reason %s", lib->members[i].member_name, lib->members[i].ban_reason);
+        }
+    }
+    return;
+}
+void lift_the_ban(LibraryManagement *lib, const char *id)
+{
+    for (int i = 0; i < lib->membercount; i++)
+    {
+        if (strcmpy(lib->members[i].id, id) != 0)
+        {
+            printf("⚠️Member not found");
+            return NULL;
+        }
+        else if (strcmpy(lib->members[i].id, id) == 0)
+        {
+            lib->members[i].is_banned = false;
+            strcpy(lib->members[i].ban_reason, "");
+            save_members_to_file;
+            printf("Ban Lifted for member %s", lib->members[i].member_name),
+        }
+    }
+    return;
 }
 
+// JSON BOLUMU
+void save_books_to_file(const LibraryManagement *lib)
+{
+    FILE *file = fopen("books.txt", "w");
+    if (file == NULL)
+    {
+        return;
+    }
+    for (int i = 0; i < lib->bookcount; i++)
+    {
+        fprintf(file, "%s|%s|%s|%d\n",
+                lib->bookshelf[i].id,
+                lib->bookshelf[i].book_title,
+                lib->bookshelf[i].author_name,
+                lib->bookshelf[i].in_library);
+    }
+    fclose(file);
+}
+
+void load_books_from_file(LibraryManagement *lib)
+{
+    FILE *file = fopen("books.txt", "r");
+    if (file == NULL)
+    {
+        return;
+    }
+    lib->bookcount = 0;
+    while (fscanf(file, "%49[^|]|%99[^|]|%99[^|]|%d\n",
+                  lib->bookshelf[lib->bookcount].id,
+                  lib->bookshelf[lib->bookcount].book_title,
+                  lib->bookshelf[lib->bookcount].author_name,
+                  (int *)&lib->bookshelf[lib->bookcount].in_library) == 4)
+    {
+        lib->bookcount++;
+        if (lib->bookshelf >= 100)
+        {
+            break;
+        }
+    }
+    fclose(file);
+}
+void save_members_to_file(const LibraryManagement *lib)
+{
+    FILE *file = fopen("members.txt", "w");
+    if (file == NULL)
+    {
+        return;
+    }
+    for (int i = 0; i < lib->membercount i++)
+    {
+        fprintf(file, "%s|%s|%d|%d|%s|%d\n",
+                lib->members[lib->membercount].id,
+                lib->members[lib->membercount].member_name,
+                (int *)&lib->members[lib->membercount].is_the_member_registered,
+                (int *)&lib->members[lib->membercount].is_banned,
+                lib->members[lib->membercount].ban_reason,
+                (int *)&lib->members[lib->membercount].borrowed_books_count);
+    }
+    fclose(file);
+}
+void load_members_from_file(LibraryManagement *lib)
+{
+  FILE*file = fopen("members.txt","r");
+  if (file == NULL)
+  {
+    return;
+  }
+  lib->membercount = 0;
+  while (fscanf(file,"%49[^|]|%99[^|]|%d[^|]|%d[^|]|%9[]"))
+  {
+
+  }
+  
+  
+}
