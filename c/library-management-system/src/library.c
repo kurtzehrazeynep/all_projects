@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "library.h"
 
 void init_library(LibraryManagement *lib)
@@ -17,7 +18,7 @@ void add_book(LibraryManagement *lib, const char *id, const char *title, const c
     {
         strcpy(lib->bookshelf[lib->bookcount].id, id);
         strcpy(lib->bookshelf[lib->bookcount].book_title, title);
-        srtcpy(lib->bookshelf[lib->bookcount].author_name, author);
+        strcpy(lib->bookshelf[lib->bookcount].author_name, author);
         lib->bookshelf[lib->bookcount].in_library = true;
         lib->bookcount++;
 
@@ -51,7 +52,7 @@ void list_all_books(const LibraryManagement *lib)
     }
 }
 
-void total_count_statistica(const LibraryManagement *lib)
+void view_total_count_statistics(const LibraryManagement *lib)
 {
     printf("Total Book Count : %d ", lib->bookcount);
     printf("Total Member Count : %d ", lib->membercount);
@@ -88,7 +89,7 @@ void list_all_members(const LibraryManagement *lib)
         printf("\n--- Registered Members List ---\n");
         for (int i = 0; i < lib->membercount; i++)
         {
-            char status[200];
+            char status[300];
             if (!lib->members[i].is_the_member_registered)
             {
                 strcpy(status, "DEACTIVATED");
@@ -172,7 +173,7 @@ void lend_book(LibraryManagement *lib, const char *book_id, const char *member_i
         if (strcmp(lib->bookshelf[i].id, book_id) != 0)
         {
             printf("⚠️ Book not found!");
-            return NULL;
+            return;
         }
         else if (strcmp(lib->bookshelf[i].id, book_id) == 0)
         {
@@ -186,12 +187,12 @@ void lend_book(LibraryManagement *lib, const char *book_id, const char *member_i
     }
     for (int i = 0; i < lib->membercount; i++)
     {
-        if (strcmp(lib->members[i].id != 0))
+        if (strcmp(lib->members[i].id, member_id) != 0)
         {
             printf("⚠️ Member not found!");
             return;
         }
-        else if (strcmp(lib->members[i].id == 0))
+        else if (strcmp(lib->members[i].id, member_id) == 0)
         {
             index_m = i;
             if (lib->members[index_m].is_the_member_registered == false)
@@ -206,7 +207,7 @@ void lend_book(LibraryManagement *lib, const char *book_id, const char *member_i
             }
             lib->bookshelf[index].in_library = false;
             lib->members->borrowed_books_count++;
-            strcnpy(lib->members[index_m].borrowed_books_list[lib->members[index_m].borrowed_books_count], lib->bookshelf[index].book_title);
+            strcmp(lib->members[index_m].borrowed_books_list[lib->members[index_m].borrowed_books_count], lib->bookshelf[index].book_title);
             save_books_to_file(lib);
             save_members_to_file(lib);
             printf("Book '%s' succesfully lent to '%s'", lib->bookshelf[index].book_title, lib->members[index_m].member_name);
@@ -221,34 +222,34 @@ void return_book(LibraryManagement *lib, const char *book_id, const char *member
     int index_b;
     for (int i = 0; i < lib->membercount; i++)
     {
-        if (strcmpy(lib->members[i].id, member_id) != 0)
+        if (strcmp(lib->members[i].id, member_id) != 0)
         {
             printf("⚠️ Invalid member ID.");
-            return NULL;
+            return;
         }
         index_m = i;
     }
     for (int i = 0; i < lib->bookcount; i++)
     {
-        if (strcmpy(lib->bookshelf[i].id, book_id) != 0)
+        if (strcmp(lib->bookshelf[i].id, book_id) != 0)
         {
             printf("⚠️ Invalid member ID.");
-            return NULL;
+            return;
         }
     }
     for (int i = 0; i < lib->members->borrowed_books_count; i++)
     {
-        if (strcmpy(lib->members[index_m].borrowed_books_list[i], lib->bookshelf[index_b].book_title) != 0)
+        if (strcmp(lib->members[index_m].borrowed_books_list[i], lib->bookshelf[index_b].book_title) != 0)
         {
             printf("⚠️ This book was not borrowed by this member.");
             return;
         }
-        else if (strcmpy(lib->members[index_m].borrowed_books_list[i], lib->bookshelf[index_b].book_title) == 0)
+        else if (strcmp(lib->members[index_m].borrowed_books_list[i], lib->bookshelf[index_b].book_title) == 0)
         {
             for (int i = 0; i < lib->members->borrowed_books_count; i++)
             {
-                lib->members[index_m].borrowed_books_list[i] = lib->members[index_m].borrowed_books_list[i + 1];
-                lib->members[index_m].borrowed_books_list[lib->members->borrowed_books_count - 1] = '\0';
+                strcpy(lib->members[index_m].borrowed_books_list[i], lib->members[index_m].borrowed_books_list[i + 1]);
+                strcpy(lib->members[index_m].borrowed_books_list[lib->members->borrowed_books_count - 1], "\0");
             }
             lib->bookshelf[index_b].in_library = true;
             lib->members[index_m].borrowed_books_count--;
@@ -262,12 +263,12 @@ void ban_member(LibraryManagement *lib, const char *id, const char *ban_reason)
 {
     for (int i = 0; i < lib->membercount; i++)
     {
-        if (strcmpy(lib->members[i].id, id) != 0)
+        if (strcmp(lib->members[i].id, id) != 0)
         {
             printf("⚠️ Member not found!.");
-            return NULL;
+            return;
         }
-        else if (strcmpy(lib->members[i].id, id) == 0)
+        else if (strcmp(lib->members[i].id, id) == 0)
         {
             lib->members[i].is_banned = true;
             strcpy(lib->members[i].ban_reason, ban_reason);
@@ -281,12 +282,12 @@ void lift_the_ban(LibraryManagement *lib, const char *id)
 {
     for (int i = 0; i < lib->membercount; i++)
     {
-        if (strcmpy(lib->members[i].id, id) != 0)
+        if (strcmp(lib->members[i].id, id) != 0)
         {
             printf("⚠️Member not found");
-            return NULL;
+            return;
         }
-        else if (strcmpy(lib->members[i].id, id) == 0)
+        else if (strcmp(lib->members[i].id, id) == 0)
         {
             lib->members[i].is_banned = false;
             strcpy(lib->members[i].ban_reason, "");
@@ -331,7 +332,7 @@ void load_books_from_file(LibraryManagement *lib)
                   (int *)&lib->bookshelf[lib->bookcount].in_library) == 4)
     {
         lib->bookcount++;
-        if (lib->bookshelf >= 100)
+        if (lib->bookcount >= 100)
         {
             break;
         }

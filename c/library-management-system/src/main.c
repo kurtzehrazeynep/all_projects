@@ -6,9 +6,9 @@ int main()
     LibraryManagement system;
     init_library(&system);
     int choice;
-    int book_id[50];
-    int member_id[50];
-    int member_name[100];
+    char book_id[50];
+    char member_id[50];
+    char member_name[100];
     char title[100];
     char author_name[100];
     char ban_reason[200];

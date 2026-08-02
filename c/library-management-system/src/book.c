@@ -5,7 +5,7 @@
 
 static int total_books_count = 0;
 
-InventoryEntry *create_book(int id, const char *title, const char *author, bool in_library)
+InventoryEntry *create_book(const char* id, const char *title, const char *author, bool in_library)
 {
     InventoryEntry *new_book = (InventoryEntry *)malloc(sizeof(InventoryEntry));
     if (new_book == NULL)
@@ -13,8 +13,8 @@ InventoryEntry *create_book(int id, const char *title, const char *author, bool 
         printf("Memory allocation failed!\n");
         return NULL;
     }
-
-    new_book->id = id;
+    strncpy(new_book->id, title, sizeof(new_book->id) - 1);
+    new_book->id[sizeof(new_book->id) - 1] = '\0';
 
     strncpy(new_book->book_title, title, sizeof(new_book->book_title) - 1);
     new_book->book_title[sizeof(new_book->book_title) - 1] = '\0';
