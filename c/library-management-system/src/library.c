@@ -14,21 +14,21 @@ void init_library(LibraryManagement *lib)
 
 void add_book(LibraryManagement *lib, const char *id, const char *title, const char *author)
 {
-    if (lib->bookcount < 100)
+    if (lib->bookcount >= 100)
     {
-        strcpy(lib->bookshelf[lib->bookcount].id, id);
-        strcpy(lib->bookshelf[lib->bookcount].book_title, title);
-        strcpy(lib->bookshelf[lib->bookcount].author_name, author);
-        lib->bookshelf[lib->bookcount].in_library = true;
-        lib->bookcount++;
-
-        save_books_to_file(lib);
-        printf("Book succesfully saved!");
+        printf("Library is full!\n");
+        return;
     }
-    else
+    InventoryEntry *new_book = create_book(id, title, author, true);
+    if (new_book == NULL)
     {
-        printf("⚠️ Bookshelf is ful!");
+        return;
     }
+    lib->bookshelf[lib->bookcount] = *new_book;
+    free(new_book);
+    lib->bookcount++;
+    save_books_to_file(lib);
+    printf("Book succesfully saved!");
 }
 void list_all_books(const LibraryManagement *lib)
 {

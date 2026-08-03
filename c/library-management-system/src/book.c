@@ -13,7 +13,7 @@ InventoryEntry *create_book(const char* id, const char *title, const char *autho
         printf("Memory allocation failed!\n");
         return NULL;
     }
-    strncpy(new_book->id, title, sizeof(new_book->id) - 1);
+    strncpy(new_book->id, id, sizeof(new_book->id) - 1);
     new_book->id[sizeof(new_book->id) - 1] = '\0';
 
     strncpy(new_book->book_title, title, sizeof(new_book->book_title) - 1);
@@ -29,7 +29,6 @@ InventoryEntry *create_book(const char* id, const char *title, const char *autho
     printf("New book: '%s-%s' has been added.\n", new_book->book_title, new_book->author_name);
     return new_book;
 }
-
 int get_total_books_count(void)
 {
     return total_books_count;

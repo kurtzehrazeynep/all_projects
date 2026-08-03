@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "library.h"
+
 int main()
 {
     LibraryManagement system;
     init_library(&system);
+    char choice_str[100];
     int choice;
     char book_id[50];
     char member_id[50];
@@ -12,6 +15,7 @@ int main()
     char title[100];
     char author_name[100];
     char ban_reason[200];
+
     do
     {
         printf("\n=== BOOK & JSON TEST MENU ===\n");
@@ -28,107 +32,139 @@ int main()
         printf("11. Lift the ban\n");
         printf("12. Exit\n");
         printf("Your choice: ");
-
-        if (scanf("%d", &choice) != 1)
+        
+        if (fgets(choice_str, sizeof(choice_str), stdin) == NULL)
         {
-            printf("Invalid input! Please enter a number.\n");
-            while (getchar() != '\n')
-                ;
             continue;
         }
-        while (getchar() != '\n')
-            ;
-        switch (choice)
+        choice_str[strcspn(choice_str, "\r\n")] = '\0';
+
+        // Boş girdi kontrolü
+        if (choice_str[0] == '\0')
         {
-        case 1:
+            printf("Invalid Option!\n");
+            continue;
+        }
+
+        // strtol kullanarak metnin tamamen sayı olup olmadığını denetliyoruz
+        char *endptr;
+        long val = strtol(choice_str, &endptr, 10);
+
+        // Eğer sayının devamında harf kaldıysa (*endptr != '\0') veya sayı 1-12 aralığında değilse geçersiz say
+        if (*endptr != '\0' || val < 1 || val > 12)
+        {
+            printf("Invalid Option!\n");
+            continue; // Döngünün başına dön ve tekrar menü sor
+        }
+
+        choice = (int)val;
+
+        if (choice == 1)
+        {
             printf("Enter Book ID: ");
             fgets(book_id, sizeof(book_id), stdin);
-            book_id[strspn(book_id, "\n")] = '\0';
+            book_id[strcspn(book_id, "\r\n")] = '\0';
 
             printf("Enter Book Title: ");
             fgets(title, sizeof(title), stdin);
-            title[strspn(title, "\n")] = '\0';
+            title[strcspn(title, "\r\n")] = '\0';
 
             printf("Enter Author Name: ");
             fgets(author_name, sizeof(author_name), stdin);
-            author_name[strspn(author_name, "\n")] = '\0';
+            author_name[strcspn(author_name, "\r\n")] = '\0';
 
             add_book(&system, book_id, title, author_name);
-
-            break;
-        case 2:
-            printf("Liating All Books...");
+        }
+        else if (choice == 2)
+        {
+            printf("Listing All Books...\n");
             list_all_books(&system);
-        case 3:
-            printf("Viewing Statistics...");
+        }
+        else if (choice == 3)
+        {
+            printf("Viewing Statistics...\n");
             view_total_count_statistics(&system);
-        case 4:
+        }
+        else if (choice == 4)
+        {
             printf("Please Enter Member ID: ");
             fgets(member_id, sizeof(member_id), stdin);
-            member_id[strspn(member_id, "\n")] = '\0';
+            member_id[strcspn(member_id, "\r\n")] = '\0';
 
             printf("Enter Member Name: ");
             fgets(member_name, sizeof(member_name), stdin);
+            member_name[strcspn(member_name, "\r\n")] = '\0';
 
-            member_name[strspn(member_name, "\n")] = '\0';
             add_member(&system, member_id, member_name);
-        case 5:
+        }
+        else if (choice == 5)
+        {
             list_all_members(&system);
-        case 6:
+        }
+        else if (choice == 6)
+        {
             printf("Please Enter Book ID: ");
             fgets(book_id, sizeof(book_id), stdin);
-            book_id[strspn(book_id, "\n")] = '\0';
+            book_id[strcspn(book_id, "\r\n")] = '\0';
             remove_book(&system, book_id);
-        case 7:
-            printf("Please enter the ID  of the member you wish to cancel");
+        }
+        else if (choice == 7)
+        {
+            printf("Please enter the ID of the member you wish to cancel: ");
             fgets(member_id, sizeof(member_id), stdin);
-            member_id[strspn(member_id, "\n")] = '\0';
+            member_id[strcspn(member_id, "\r\n")] = '\0';
             delete_member_registration(&system, member_id);
-        case 8:
-            printf("Please enter the ID of the book you wish to borrow.");
+        }
+        else if (choice == 8)
+        {
+            printf("Please enter the ID of the book you wish to borrow: ");
             fgets(book_id, sizeof(book_id), stdin);
-            book_id[strspn(book_id, "\n")] = '\0';
+            book_id[strcspn(book_id, "\r\n")] = '\0';
 
-            printf("Please enter the member ID of the person to whom the book will be lent. ");
+            printf("Please enter the member ID of the person to whom the book will be lent: ");
             fgets(member_id, sizeof(member_id), stdin);
-            member_id[strspn(member_id, "\n")] = '\0';
+            member_id[strcspn(member_id, "\r\n")] = '\0';
+
             lend_book(&system, book_id, member_id);
-
-        case 9:
-            printf("Enter the ID of the member who will make the return.");
+        }
+        else if (choice == 9)
+        {
+            printf("Enter the ID of the member who will make the return: ");
             fgets(member_id, sizeof(member_id), stdin);
-            member_id[strspn(member_id, "\n")] = '\0';
+            member_id[strcspn(member_id, "\r\n")] = '\0';
 
-            printf("Please Enter The ID of the book you wish to return. ");
+            printf("Please Enter The ID of the book you wish to return: ");
             fgets(book_id, sizeof(book_id), stdin);
-            book_id[strspn(book_id, "\n")] = '\0';
+            book_id[strcspn(book_id, "\r\n")] = '\0';
 
             return_book(&system, book_id, member_id);
-
-        case 10:
-            printf("Enter the ID of the member to be banned. ");
+        }
+        else if (choice == 10)
+        {
+            printf("Enter the ID of the member to be banned: ");
             fgets(member_id, sizeof(member_id), stdin);
-            member_id[strspn(member_id, "\n")] = '\0';
+            member_id[strcspn(member_id, "\r\n")] = '\0';
 
-            printf("Please Enter The Reason for the ban. ");
+            printf("Please Enter The Reason for the ban: ");
             fgets(ban_reason, sizeof(ban_reason), stdin);
-            ban_reason[strspn(ban_reason, "\n")] = '\0';
+            ban_reason[strcspn(ban_reason, "\r\n")] = '\0';
 
             ban_member(&system, member_id, ban_reason);
-        case 11:
-            printf("Enter the ID of the User whose ban is to be lifted.");
-            fgets(member_id, sizeof(member_id), stdin);
-            member_id[strspn(member_id, "\n")] = '\0';
-
-            lift_the_ban(&system,member_id);
-        case 12:
-            printf("Exiting test system. Goodbye!");
-            return 0;
-
-        default:
-            printf("Invalid Option!");
         }
+        else if (choice == 11)
+        {
+            printf("Enter the ID of the User whose ban is to be lifted: ");
+            fgets(member_id, sizeof(member_id), stdin);
+            member_id[strcspn(member_id, "\r\n")] = '\0';
 
+            lift_the_ban(&system, member_id);
+        }
+        else if (choice == 12)
+        {
+            printf("Exiting test system. Goodbye!\n");
+            return 0;
+        }
     } while (1);
+
     return 0;
 }
