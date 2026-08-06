@@ -14,6 +14,21 @@ void init_library(LibraryManagement *lib)
 
 void add_book(LibraryManagement *lib, const char *id, const char *title, const char *author)
 {
+    if (id[0] == '\0' || id[0] == ' ')
+    {
+        printf("⚠️ Invalid Option!");
+        return;
+    }
+
+    for (int i = 0; i < lib->bookcount; i++)
+    {
+        if (strcmp(lib->bookshelf[i].id, id) == 0)
+        {
+            printf("⚠️ The book could not be saved! The same ID cannot be used twice.");
+            return;
+        }
+    }
+
     if (lib->bookcount >= 100)
     {
         printf("Library is full!\n");
@@ -60,6 +75,29 @@ void view_total_count_statistics(const LibraryManagement *lib)
 
 void add_member(LibraryManagement *lib, const char *id, const char *member_name)
 {
+    if (id[0] == '\0' || id[0] == ' ')
+    {
+        printf("⚠️ Invalid Option!");
+        return;
+    }
+
+    for (int i = 0; i < lib->membercount; i++)
+    {
+        if (strcmp(lib->members[i].id, id) == 0)
+        {
+            if (lib->members[i].is_the_member_registered == false && lib->members[i].member_name == member_name)
+            {
+                printf("The member has been reactivated.");
+                lib->members[i].is_the_member_registered = true;
+                save_members_to_file(lib);
+                return;
+            }
+
+            printf("⚠️ The member could not be saved! The same ID cannot be used twice.");
+            return;
+        }
+    }
+
     if (lib->membercount < 100)
     {
         strcpy(lib->members[lib->membercount].id, id);
